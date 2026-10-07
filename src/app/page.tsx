@@ -1,7 +1,9 @@
-import React from 'react';
+import Hero from '@/components/Hero';
 
-const page = () => {
-  return <div>Page</div>;
-};
-
-export default page;
+export default function Home() {
+  return (
+    <div className='flex flex-col min-h-screen bg-black'>
+      <Hero />
+    </div>
+  );
+}
