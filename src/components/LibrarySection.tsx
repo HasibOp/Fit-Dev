@@ -4,7 +4,7 @@ import { Workout } from '@/types/workout';
 async function getWorkouts(): Promise<Workout[]> {
   try {
     const res = await fetch('https://api.api-store.workers.dev/api/fitlog', {
-      next: { revalidate: 3600 }, // Cache for 1 hour
+      next: { revalidate: 3600 },
     });
 
     if (!res.ok) throw new Error('Failed to fetch workouts');
@@ -33,7 +33,6 @@ export default async function LibrarySection() {
         </p>
       </div>
 
-      {/* Grid */}
       {workouts.length === 0 ? (
         <p className='text-gray-400 text-center py-20'>
           No workouts available.

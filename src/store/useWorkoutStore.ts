@@ -45,7 +45,7 @@ export const useWorkoutStore = create<WorkoutStore>()(
       isSaved: (id) => get().savedWorkouts.some((w) => w.id === id),
     }),
     {
-      name: 'fitlog-storage', // localStorage key
+      name: 'fitlog-storage', 
     }
   )
 );
