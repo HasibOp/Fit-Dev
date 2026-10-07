@@ -26,17 +26,16 @@ async function getWorkout(id: string): Promise<Workout | null> {
 export default async function WorkoutDetailPage({
   params,
 }: WorkoutDetailPageProps) {
-  const { id } = await params; // await params in Next.js 15
+  const { id } = await params;
   const workout = await getWorkout(id);
 
   if (!workout) notFound();
 
   return (
     <div className='w-full max-w-7xl mx-auto px-4 py-12 md:px-8'>
-      <div className='bg-[#121212] border border-[#222222] rounded-[2rem] overflow-hidden'>
+      <div className='bg-[#121212] border border-[#222222] rounded-4xl overflow-hidden'>
         <div className='flex flex-col lg:flex-row'>
-          {/* LEFT: Image */}
-          <div className='lg:w-1/2 relative min-h-[300px] lg:min-h-[600px]'>
+          <div className='lg:w-1/2 relative min-h-75 lg:min-h-150'>
             <Image
               src={workout.image}
               alt={workout.name}
@@ -46,17 +45,13 @@ export default async function WorkoutDetailPage({
             />
           </div>
 
-          {/* RIGHT: Content */}
           <div className='lg:w-1/2 p-8 md:p-12 flex flex-col'>
-            {/* Title */}
             <h1 className='font-oswald text-4xl md:text-5xl font-bold text-white uppercase tracking-tight mb-3'>
               {workout.name}
             </h1>
 
-            {/* Description */}
             <p className='text-gray-400 text-sm mb-6'>{workout.description}</p>
 
-            {/* Tags */}
             <div className='flex flex-wrap gap-2 mb-8'>
               {workout.muscleGroups.map((group) => (
                 <span
@@ -68,7 +63,6 @@ export default async function WorkoutDetailPage({
               ))}
             </div>
 
-            {/* Specs Table */}
             <div className='border border-[#2a2a2a] rounded-xl overflow-hidden mb-8'>
               {[
                 { label: 'Equipment', value: workout.equipment },
@@ -93,7 +87,6 @@ export default async function WorkoutDetailPage({
               ))}
             </div>
 
-            {/* Instructions */}
             <div className='mb-8'>
               <h2 className='font-oswald text-xl font-bold text-white uppercase tracking-wide mb-4'>
                 Instructions

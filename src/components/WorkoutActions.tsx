@@ -9,13 +9,20 @@ interface WorkoutActionsProps {
 }
 
 export default function WorkoutActions({ workout }: WorkoutActionsProps) {
-  const { addToPlan, saveForLater, isInPlan, isSaved } = useWorkoutStore();
+  const { planWorkouts, addToPlan, saveForLater, isInPlan, isSaved } =
+    useWorkoutStore();
+
   const inPlan = isInPlan(workout.id);
   const saved = isSaved(workout.id);
+  const isPlanFull = planWorkouts.length >= 5;
 
   const handleAddToPlan = () => {
     if (inPlan) {
       toast.error("Already in today's plan");
+      return;
+    }
+    if (isPlanFull) {
+      toast.error("Today's plan is full (Max 5 lifts)");
       return;
     }
     addToPlan(workout);
@@ -33,15 +40,14 @@ export default function WorkoutActions({ workout }: WorkoutActionsProps) {
 
   return (
     <div className='flex flex-col sm:flex-row gap-3 mt-auto'>
-      {/* Primary: Add to Today's Plan */}
       <button
         onClick={handleAddToPlan}
+        disabled={inPlan || isPlanFull}
         className={`flex-1 font-extrabold text-xs tracking-widest uppercase px-6 py-4 rounded-sm transition-colors duration-200 flex items-center justify-center gap-2 ${
-          inPlan
+          inPlan || isPlanFull
             ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
             : 'bg-[#a3e635] text-black hover:bg-[#84cc16]'
         }`}
-        disabled={inPlan}
       >
         <svg
           xmlns='http://www.w3.org/2000/svg'
@@ -57,18 +63,21 @@ export default function WorkoutActions({ workout }: WorkoutActionsProps) {
           <line x1='12' y1='5' x2='12' y2='19' />
           <line x1='5' y1='12' x2='19' y2='12' />
         </svg>
-        {inPlan ? 'In Plan' : "Add to Today's Plan"}
+        {inPlan
+          ? 'In Plan'
+          : isPlanFull
+            ? 'Plan Full (Max 5)'
+            : "Add to Today's Plan"}
       </button>
 
-      {/* Secondary: Save for Later */}
       <button
         onClick={handleSaveForLater}
+        disabled={saved}
         className={`flex-1 font-extrabold text-xs tracking-widest uppercase px-6 py-4 rounded-sm transition-colors duration-200 flex items-center justify-center gap-2 border ${
           saved
             ? 'bg-gray-800 text-gray-500 border-gray-700 cursor-not-allowed'
             : 'bg-transparent text-white border-[#a3e635] hover:bg-[#a3e635]/10'
         }`}
-        disabled={saved}
       >
         <svg
           xmlns='http://www.w3.org/2000/svg'
