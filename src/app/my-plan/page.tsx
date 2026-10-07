@@ -12,7 +12,6 @@ export default function MyPlanPage() {
 
   const currentList = activeTab === 'plan' ? planWorkouts : savedWorkouts;
 
-  // Calculate metrics
   const totalExercises = planWorkouts.length;
   const totalMinutes = planWorkouts.reduce((sum, w) => sum + w.duration, 0);
   const totalCalories = planWorkouts.reduce(
@@ -30,7 +29,6 @@ export default function MyPlanPage() {
 
   return (
     <div className='w-full max-w-7xl mx-auto px-4 py-12 md:px-8'>
-      {/* Heading */}
       <div className='mb-10'>
         <h1 className='font-oswald text-4xl md:text-5xl font-bold text-white uppercase tracking-tight'>
           My Plan
@@ -109,7 +107,7 @@ export default function MyPlanPage() {
               className='bg-[#121212] border border-[#222222] rounded-2xl p-4 flex flex-col sm:flex-row items-center gap-4'
             >
               {/* Thumbnail */}
-              <div className='relative w-full sm:w-24 h-24 rounded-xl overflow-hidden flex-shrink-0'>
+              <div className='relative w-full sm:w-24 h-24 rounded-xl overflow-hidden shrink-0'>
                 <Image
                   src={workout.image}
                   alt={workout.name}
@@ -157,7 +155,7 @@ export default function MyPlanPage() {
                 </Link>
                 <button
                   onClick={() => handleRemove(workout.id)}
-                  className='flex-shrink-0 w-10 h-10 flex items-center justify-center border border-red-500/50 text-red-500 rounded-sm hover:bg-red-500/10 transition-colors'
+                  className='shrink-0 w-10 h-10 flex items-center justify-center border border-red-500/50 text-red-500 rounded-sm hover:bg-red-500/10 transition-colors'
                   aria-label='Remove'
                 >
                   <svg

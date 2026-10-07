@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import { Oswald } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
 import './globals.css';
-import Navbar from '@/components/Navbar';
 import NavbarWrapper from '@/components/NavbarWrapper';
+import Footer from '@/components/Footer';
 
 const oswald = Oswald({
   subsets: ['latin'],
@@ -26,6 +26,7 @@ export default function RootLayout({
       <body className='bg-black min-h-screen flex flex-col text-white font-sans'>
         <NavbarWrapper />
         <main className='flex-1'>{children}</main>
+        <Footer />
         <Toaster
           position='bottom-right'
           toastOptions={{
