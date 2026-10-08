@@ -9,7 +9,7 @@
     "lint": "eslint"
   },
   "allowScripts": {
-    "unrs-resolver": true
+    "unrs-resolver@1.12.2": true
   },
   "dependencies": {
     "next": "16.4.0",
