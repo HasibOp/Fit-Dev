@@ -3,12 +3,16 @@
 import { useWorkoutStore } from '@/store/useWorkoutStore';
 import { Workout } from '@/types/workout';
 import toast from 'react-hot-toast';
+import { useIsMounted } from '@/hooks/useIsMounted'; // Import the new hook
 
 interface WorkoutActionsProps {
   workout: Workout;
 }
 
 export default function WorkoutActions({ workout }: WorkoutActionsProps) {
+  // Use the hook instead of useState + useEffect
+  const isMounted = useIsMounted();
+
   const { planWorkouts, addToPlan, saveForLater, isInPlan, isSaved } =
     useWorkoutStore();
 
@@ -38,6 +42,27 @@ export default function WorkoutActions({ workout }: WorkoutActionsProps) {
     toast.success('Saved for later');
   };
 
+  // Render placeholder during SSR
+  if (!isMounted) {
+    return (
+      <div className='flex flex-col sm:flex-row gap-3 mt-auto'>
+        <button
+          disabled
+          className='flex-1 font-extrabold text-xs tracking-widest uppercase px-6 py-4 rounded-sm transition-colors duration-200 flex items-center justify-center gap-2 bg-gray-700 text-gray-400 cursor-not-allowed'
+        >
+          Add to Todays Plan
+        </button>
+        <button
+          disabled
+          className='flex-1 font-extrabold text-xs tracking-widest uppercase px-6 py-4 rounded-sm transition-colors duration-200 flex items-center justify-center gap-2 border bg-transparent text-white border-[#a3e635]'
+        >
+          Save for Later
+        </button>
+      </div>
+    );
+  }
+
+  // Render real UI on client
   return (
     <div className='flex flex-col sm:flex-row gap-3 mt-auto'>
       <button

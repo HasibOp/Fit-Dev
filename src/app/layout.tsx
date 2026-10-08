@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Oswald } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
+import { Suspense } from 'react';
 import './globals.css';
 import NavbarWrapper from '@/components/NavbarWrapper';
 import Footer from '@/components/Footer';
@@ -14,6 +15,9 @@ const oswald = Oswald({
 export const metadata: Metadata = {
   title: 'FitLog',
   description: 'Track your workouts',
+  icons: {
+    icon: '/logo.png',
+  },
 };
 
 export default function RootLayout({
@@ -23,8 +27,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' className={oswald.variable}>
-      <body className='bg-black min-h-screen flex flex-col text-white font-sans'>
-        <NavbarWrapper />
+      <body className='bg-black min-h-screen flex flex-col text-white font-sans overflow-x-hidden'>
+        {' '}
+        <Suspense
+          fallback={
+            <div className='h-18 bg-[#0a0a0a] border-b border-gray-800' />
+          }
+        >
+          <NavbarWrapper />
+        </Suspense>
         <main className='flex-1'>{children}</main>
         <Footer />
         <Toaster

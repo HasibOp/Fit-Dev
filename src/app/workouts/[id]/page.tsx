@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 import { Workout } from '@/types/workout';
 import WorkoutActions from '@/components/WorkoutActions';
 
@@ -15,7 +16,6 @@ async function getWorkout(id: string): Promise<Workout | null> {
         next: { revalidate: 3600 },
       },
     );
-
     if (!res.ok) return null;
     return res.json();
   } catch {
@@ -23,9 +23,7 @@ async function getWorkout(id: string): Promise<Workout | null> {
   }
 }
 
-export default async function WorkoutDetailPage({
-  params,
-}: WorkoutDetailPageProps) {
+async function WorkoutDetails({ params }: WorkoutDetailPageProps) {
   const { id } = await params;
   const workout = await getWorkout(id);
 
@@ -35,6 +33,7 @@ export default async function WorkoutDetailPage({
     <div className='w-full max-w-7xl mx-auto px-4 py-12 md:px-8'>
       <div className='bg-[#121212] border border-[#222222] rounded-4xl overflow-hidden'>
         <div className='flex flex-col lg:flex-row'>
+          {/* LEFT: Image */}
           <div className='lg:w-1/2 relative min-h-75 lg:min-h-150'>
             <Image
               src={workout.image}
@@ -49,7 +48,6 @@ export default async function WorkoutDetailPage({
             <h1 className='font-oswald text-4xl md:text-5xl font-bold text-white uppercase tracking-tight mb-3'>
               {workout.name}
             </h1>
-
             <p className='text-gray-400 text-sm mb-6'>{workout.description}</p>
 
             <div className='flex flex-wrap gap-2 mb-8'>
@@ -103,10 +101,29 @@ export default async function WorkoutDetailPage({
               </ol>
             </div>
 
-            {/* Action Buttons */}
             <WorkoutActions workout={workout} />
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+export default function WorkoutDetailPage({ params }: WorkoutDetailPageProps) {
+  return (
+    <Suspense fallback={<LoadingSkeleton />}>
+      <WorkoutDetails params={params} />
+    </Suspense>
+  );
+}
+
+function LoadingSkeleton() {
+  return (
+    <div className='w-full max-w-7xl mx-auto px-4 py-12 md:px-8 animate-pulse'>
+      <div className='bg-[#121212] border border-[#222222] rounded-4xl h-150 flex items-center justify-center'>
+        <p className='text-[#a3e635] font-bold tracking-widest uppercase'>
+          Loading Workout Details…
+        </p>
       </div>
     </div>
   );
