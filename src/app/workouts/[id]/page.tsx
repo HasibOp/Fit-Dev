@@ -9,18 +9,37 @@ interface WorkoutDetailPageProps {
 }
 
 async function getWorkout(id: string): Promise<Workout | null> {
-  try {
-    const res = await fetch(
-      `https://api.api-store.workers.dev/api/fitlog/${id}`,
-      {
-        next: { revalidate: 3600 },
-      },
-    );
-    if (!res.ok) return null;
-    return res.json();
-  } catch {
+  const primaryUrl = process.env.API_URL_PRIMARY;
+  const secondaryUrl = process.env.API_URL_SECONDARY;
+
+  if (!primaryUrl && !secondaryUrl) {
+    console.error('No API URLs configured in environment variables.');
     return null;
   }
+
+  const fetchFromUrl = async (url: string) => {
+    const res = await fetch(`${url}/${id}`, { next: { revalidate: 3600 } });
+    if (!res.ok) throw new Error(`Failed to fetch from ${url}/${id}`);
+    return res.json();
+  };
+
+  if (primaryUrl) {
+    try {
+      return await fetchFromUrl(primaryUrl);
+    } catch (error) {
+      console.warn('Primary API failed. Attempting secondary API...', error);
+    }
+  }
+
+  if (secondaryUrl) {
+    try {
+      return await fetchFromUrl(secondaryUrl);
+    } catch (error) {
+      console.error('Secondary API failed as well:', error);
+    }
+  }
+
+  return null;
 }
 
 async function WorkoutDetails({ params }: WorkoutDetailPageProps) {
